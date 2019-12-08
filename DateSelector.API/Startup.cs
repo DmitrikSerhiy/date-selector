@@ -1,3 +1,5 @@
+using DateSelector.API.Helpers;
+using DateSelector.API.Services;
 using DateSelector.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,9 @@ namespace DateSelector.API {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DateSelector API", Version = "v1"});
             });
             services.AddControllers();
+
+            services.AddScoped<DateMapper>();
+            services.AddScoped<FilterService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

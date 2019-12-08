@@ -2,6 +2,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System;
+using DateSelector.API.Helpers;
 
 namespace DateSelector.API {
     public class Program {

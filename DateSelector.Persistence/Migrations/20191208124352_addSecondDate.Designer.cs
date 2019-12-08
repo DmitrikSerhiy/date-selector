@@ -4,14 +4,16 @@ using DateSelector.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DateSelector.Persistence.Migrations
 {
     [DbContext(typeof(DateContext))]
-    partial class DateContextModelSnapshot : ModelSnapshot
+    [Migration("20191208124352_addSecondDate")]
+    partial class addSecondDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Globalization;
 using System.Linq;
+using DateSelector.API.Dto;
+using DateSelector.API.Helpers;
+using DateSelector.API.Services;
 using DateSelector.Persistence;
 using DateSelector.Persistence.Models;
 
@@ -11,42 +12,55 @@ namespace DateSelector.API.Controllers {
     [Route("[controller]")]
     public class DateComparisonController : ControllerBase {
 
-        private readonly ILogger<DateComparisonController> _logger;
+        private readonly DateMapper _dateMapper;
         private readonly DateContext _context;
+        private readonly FilterService _filterService;
 
-        public DateComparisonController(ILogger<DateComparisonController> logger, 
-            DateContext context) {
-            _logger = logger;
+        public DateComparisonController(
+            DateContext context, 
+            DateMapper dateMapper, 
+            FilterService filterService) {
             _context = context;
+            _dateMapper = dateMapper;
+            _filterService = filterService;
         }
 
         /// <summary>
         /// Endpoint for getting all available in database date
         /// </summary>
-        /// <param name="firstDate">Date in format dd-MM-yyyy</param>
-        /// <param name="secondDate">Date in format dd-MM-yyyy. It has to be after (later) than second date</param>
         [HttpGet]
         [Route("All")]
-        public ActionResult<String[]> All() {
+        public ActionResult<DateComparisonObjectDto[]> All() {
             var dateModels = _context.DateComparisonObjects.ToList();
-            return Ok(dateModels.Select(d => MapDate(d.Date)).ToArray());
+            return Ok(dateModels
+                .Select(d => new DateComparisonObjectDto {
+                    FirstDate = _dateMapper.MapDate(d.FirstDate),
+                    SecondDate = _dateMapper.MapDate(d.SecondDate)
+                })
+                .ToArray());
         }
 
-
+        /// <summary>
+        /// Endpoint for saving new date interval
+        /// </summary>
+        /// <param name="firstDate">Date in format dd-MM-yyyy</param>
+        /// <param name="secondDate">Date in format dd-MM-yyyy. It has to be later than second date</param>
         [HttpPost]
         public IActionResult Add(String firstDate, String secondDate) {
             try {
-                var mappedFirstDate = MapDate(firstDate);
-                var mappedSecondDate = MapDate(secondDate);
+                var mappedFirstDate = _dateMapper.MapDate(firstDate);
+                var mappedSecondDate = _dateMapper.MapDate(secondDate);
 
                 if (mappedFirstDate > mappedSecondDate) {
-                    return BadRequest();
+                    return Ok(Array.Empty<DateComparisonObjectDto>());
                 }
 
-                _context.DateComparisonObjects.Add(new DateComparisonObject(mappedFirstDate));
-                _context.DateComparisonObjects.Add(new DateComparisonObject(mappedSecondDate));
+                _context.DateComparisonObjects.Add(
+                    new DateComparisonObject(mappedFirstDate, mappedSecondDate));
 
-            } catch (ArgumentNullException) {
+                _context.SaveChanges();
+
+            } catch (ArgumentException) {
                 return BadRequest();
             } catch (NotSupportedException) {
                 return BadRequest();
@@ -55,24 +69,28 @@ namespace DateSelector.API.Controllers {
             return Ok();
         }
 
-        private String MapDate(Int64 dateInTickFormat) {
-            return new DateTime(dateInTickFormat).ToString("dd-MM-yyyy");
-        }
-
-        private Int64 MapDate(String date) {
-            if (String.IsNullOrWhiteSpace(date)) {
-                throw new ArgumentNullException(nameof(date));
-            }
+        /// <summary>
+        /// Endpoint for searching date withing first and second date.
+        /// </summary>
+        /// <param name="firstDate">Date in format dd-MM-yyyy</param>
+        /// <param name="secondDate">Date in format dd-MM-yyyy. It has to be after (later) than second date</param>
+        [HttpGet]
+        [Route("Filter")]
+        public ActionResult<DateComparisonObjectDto[]> Filter(String firstDate, String secondDate) {
             try {
-                DateTime.TryParse(
-                    date,
-                    CultureInfo.InvariantCulture, 
-                    DateTimeStyles.AdjustToUniversal,
-                    out var convertedDate);
-                return convertedDate.Ticks;
-            } catch (NotSupportedException ex) {
-                _logger.LogError("Invalid date format", ex);
-                throw;
+                var mappedFirstDate = _dateMapper.MapDate(firstDate);
+                var mappedSecondDate = _dateMapper.MapDate(secondDate);
+
+                if (mappedFirstDate > mappedSecondDate) {
+                    return Ok(Array.Empty<DateComparisonObjectDto>());
+                }
+
+                return Ok(_filterService.Filter(mappedFirstDate, mappedSecondDate));
+
+            } catch (ArgumentException) {
+                return BadRequest();
+            } catch (NotSupportedException) {
+                return BadRequest();
             }
         }
     }
