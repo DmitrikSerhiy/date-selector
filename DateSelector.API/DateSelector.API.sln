@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateSelector.API", "DateSelector.API.csproj", "{4652FBFC-FF8D-488A-9498-6050B117C2BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateSelector.API", "DateSelector.API.csproj", "{4652FBFC-FF8D-488A-9498-6050B117C2BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateSelector.Persistence", "..\DateSelector.Persistence\DateSelector.Persistence.csproj", "{DA724D03-1BFA-4A76-B92F-1625AE8F77DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateSelector.Persistence", "..\DateSelector.Persistence\DateSelector.Persistence.csproj", "{DA724D03-1BFA-4A76-B92F-1625AE8F77DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateSelector.Caller", "..\DateSelector.Caller\DateSelector.Caller.csproj", "{8FF1FDBE-823D-4D6F-81DE-6269D750B5DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DA724D03-1BFA-4A76-B92F-1625AE8F77DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA724D03-1BFA-4A76-B92F-1625AE8F77DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA724D03-1BFA-4A76-B92F-1625AE8F77DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF1FDBE-823D-4D6F-81DE-6269D750B5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FF1FDBE-823D-4D6F-81DE-6269D750B5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FF1FDBE-823D-4D6F-81DE-6269D750B5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FF1FDBE-823D-4D6F-81DE-6269D750B5DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
