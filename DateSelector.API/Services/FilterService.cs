@@ -21,20 +21,28 @@ namespace DateSelector.API.Services {
         public DateComparisonObjectDto[] Filter(Int64 firstDate, Int64 secondDate) {
             var dateIntervals = _context.DateComparisonObjects.ToList();
             var filteredDates = new List<DateComparisonObjectDto>();
+
             foreach (var dInterval in dateIntervals) {
-                if (dInterval.FirstDate == firstDate || dInterval.SecondDate == secondDate) {
+                if (firstDate == dInterval.FirstDate || firstDate == dInterval.SecondDate) {
                     AddInterval(filteredDates, dInterval);
                     continue;
                 }
-                if (dInterval.FirstDate < firstDate && dInterval.SecondDate > secondDate) {
+                if (secondDate == dInterval.FirstDate || secondDate == dInterval.SecondDate) {
                     AddInterval(filteredDates, dInterval);
                     continue;
                 }
+
+                if (dInterval.FirstDate < firstDate && dInterval.SecondDate > firstDate) {
+                    AddInterval(filteredDates, dInterval);
+                    continue;
+                }
+
                 if (dInterval.FirstDate > firstDate && dInterval.SecondDate < secondDate) {
                     AddInterval(filteredDates, dInterval);
                     continue;
                 }
-                if (dInterval.FirstDate < secondDate && dInterval.SecondDate > secondDate) {
+
+                if (dInterval.FirstDate > firstDate && dInterval.SecondDate > secondDate) {
                     AddInterval(filteredDates, dInterval);
                 }
             }

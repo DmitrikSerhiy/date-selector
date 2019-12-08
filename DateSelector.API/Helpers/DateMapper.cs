@@ -12,7 +12,7 @@ namespace DateSelector.API.Helpers {
         }
 
         public String MapDate(Int64 dateInTickFormat) {
-            return new DateTime(dateInTickFormat).ToString(_dateFormat);
+            return new DateTime(dateInTickFormat).EndOfDay().ToString(_dateFormat);
         }
 
         public Int64 MapDate(String date) {
@@ -29,7 +29,7 @@ namespace DateSelector.API.Helpers {
                 _logger.LogWarning("Invalid date format");
                 throw new ArgumentException(nameof(date));
             }
-            return convertedDate.Ticks;
+            return convertedDate.EndOfDay().Ticks;
         }
     }
 }

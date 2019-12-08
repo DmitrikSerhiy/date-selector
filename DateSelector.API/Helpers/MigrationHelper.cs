@@ -23,8 +23,8 @@ namespace DateSelector.API.Helpers {
         private static void AddInitialData(DateContext context) {
             if (!context.DateComparisonObjects.Any()) {
                 context.DateComparisonObjects.AddRange(new List<DateComparisonObject> {
-                    new DateComparisonObject(DateTime.UtcNow.Ticks, DateTime.UtcNow.AddDays(1).Ticks),
-                    new DateComparisonObject(DateTime.UtcNow.Ticks, DateTime.UtcNow.AddDays(10).Ticks)
+                    new DateComparisonObject(DateTime.UtcNow.EndOfDay().Ticks, DateTime.UtcNow.EndOfDay().AddDays(1).Ticks),
+                    new DateComparisonObject(DateTime.UtcNow.EndOfDay().Ticks, DateTime.UtcNow.EndOfDay().AddDays(10).Ticks)
                 });
             }
 
